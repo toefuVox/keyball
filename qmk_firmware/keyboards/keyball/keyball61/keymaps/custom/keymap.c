@@ -21,10 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "quantum.h"
 
 enum {
-  X_TAP_DANCE_1,
-  X_TAP_DANCE_2,
-  X_TAP_DANCE_3,
-  X_TAP_DANCE_4,
+  TD_MINS,
+  TD_EQL,
+  TD_RBRC,
+  TD_LBRC,
+  TD_YABAI_PREV_SPACE,
+  TD_YABAI_NEXT_SPACE,
 };
 
 typedef struct {
@@ -33,14 +35,18 @@ typedef struct {
 } tap;
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  // single tap -> =, double tap -> +
- [X_TAP_DANCE_1] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, S(KC_MINS)),
  // single tap -> -, double tap -> _
- [X_TAP_DANCE_2] = ACTION_TAP_DANCE_DOUBLE(KC_EQL, S(KC_EQL)),
+ [TD_MINS] = ACTION_TAP_DANCE_DOUBLE(KC_MINS, S(KC_MINS)),
+  // single tap -> =, double tap -> +
+ [TD_EQL] = ACTION_TAP_DANCE_DOUBLE(KC_EQL, S(KC_EQL)),
  // single tap -> ], double tap -> }
- [X_TAP_DANCE_3] = ACTION_TAP_DANCE_DOUBLE(KC_RBRC, S(KC_RBRC)),
+ [TD_RBRC] = ACTION_TAP_DANCE_DOUBLE(KC_RBRC, S(KC_RBRC)),
  // single tap -> [, double tap -> {
- [X_TAP_DANCE_4] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, S(KC_LBRC)),
+ [TD_LBRC] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, S(KC_LBRC)),
+ //single tap -> prev space(alt+cmd+p), double tap -> send prev space(shift+cmd+p)
+ [TD_YABAI_PREV_SPACE] = ACTION_TAP_DANCE_DOUBLE(LALT(LGUI(KC_P)), LSFT(LGUI(KC_P))),
+ //single tap -> next space(alt+cmd+n), double tap -> send next space(shift+cmd+n)
+ [TD_YABAI_NEXT_SPACE] = ACTION_TAP_DANCE_DOUBLE(LALT(LGUI(KC_N)), LSFT(LGUI(KC_N))),
 };
 
 // clang-format off
@@ -58,15 +64,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     S(KC_DEL), S(KC_Q)  , S(KC_W)  , S(KC_E)  , S(KC_R)  , S(KC_T)  ,                                  S(KC_Y)  , S(KC_U)  , S(KC_I)  , S(KC_O)  , S(KC_P)  ,S(KC_INT3),
     S(KC_TAB), S(KC_A)  , S(KC_S)  , S(KC_D)  , S(KC_F)  , S(KC_G)  ,                                  S(KC_H)  , S(KC_J)  , S(KC_K)  , S(KC_L)  , KC_QUOT  , S(KC_2)  ,
     _______  , S(KC_Z)  , S(KC_X)  , S(KC_C)  , S(KC_V)  , S(KC_B)  ,S(KC_RBRC),           S(KC_NUHS), S(KC_N)  , S(KC_M)  ,S(KC_COMM), S(KC_DOT),S(KC_SLSH),S(KC_RSFT),
-    _______  ,S(KC_LCTL),S(KC_LALT),S(KC_LGUI), _______  , _______  , _______  ,            TD(X_TAP_DANCE_4)  , TD(X_TAP_DANCE_3)  , _______  ,S(KC_RGUI), _______  , S(KC_RALT), _______
+    _______  ,S(KC_LCTL),S(KC_LALT),S(KC_LGUI), _______  , _______  , _______  ,            TD(TD_LBRC)  , TD(TD_RBRC)  , _______  ,S(KC_RGUI), _______  , S(KC_RALT), _______
   ),
 
   [2] = LAYOUT_universal(
     _______  , KC_F1    , KC_F2    , KC_F3    , KC_F4    , KC_F5    ,                                  KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
     _______  , _______  , KC_7     , KC_8     , KC_9     , _______  ,                                  _______  , KC_LEFT  , KC_UP    , KC_RGHT  , _______  , KC_F12   ,
     _______  , _______  , KC_4     , KC_5     , KC_6     ,S(KC_SCLN),                                  KC_PGUP  , KC_BTN1  , KC_DOWN  , KC_BTN2  , KC_BTN3  , _______  ,
-    _______  , _______  , KC_1     , KC_2     , KC_3     ,S(KC_MINS), S(KC_8)  ,            S(KC_9)  , KC_PGDN  , _______  , _______  , _______  , _______  , _______  ,
-    _______  , _______  , KC_0     , KC_DOT   , _______  , _______  , _______  ,             TD(X_TAP_DANCE_2)  , TD(X_TAP_DANCE_1)  , _______  , _______  , _______  , _______  , _______
+    _______  , _______  , KC_1     , KC_2     , KC_3     ,S(KC_MINS), TD(TD_YABAI_PREV_SPACE)  ,            TD(TD_YABAI_NEXT_SPACE)  , KC_PGDN  , _______  , _______  , _______  , _______  , _______  ,
+    _______  , _______  , KC_0     , KC_DOT   , _______  , _______  , _______  ,             TD(TD_MINS)  , TD(TD_EQL)  , _______  , _______  , _______  , _______  , _______
   ),
 
   [3] = LAYOUT_universal(
